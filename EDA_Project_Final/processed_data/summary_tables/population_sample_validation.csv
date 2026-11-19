@@ -1,0 +1,10 @@
+feature,pop_mean,samp_mean,mean_error_pct,ks_stat,ks_pval,inference
+Age,41.15,41.05,0.236,0.0063,0.4268,Identical
+Annual Income,32745.22,32644.99,0.306,0.0046,0.8114,Identical
+Number of Dependents,2.01,2.02,0.595,0.0063,0.4796,Identical
+Health Score,25.61,25.42,0.752,0.0104,0.037,Near-Identical
+Previous Claims,1.0,0.99,1.308,0.0058,0.7398,Identical
+Vehicle Age,9.57,9.52,0.541,0.006,0.487,Identical
+Credit Score,592.92,591.51,0.238,0.0085,0.1587,Identical
+Insurance Duration,5.02,5.03,0.221,0.0027,0.9985,Identical
+Premium Amount,1102.54,1098.31,0.384,0.0051,0.6805,Identical

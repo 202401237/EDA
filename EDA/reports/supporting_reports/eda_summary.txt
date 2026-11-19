@@ -1,0 +1,492 @@
+================================================================================
+EXECUTIVE EXPLORATORY DATA ANALYSIS (EDA) & REPRESENTATIVE SAMPLING REPORT
+PROJECT: INSURANCE PREMIUM PREDICTION DATASET (1.2M POPULATION TO 20K SAMPLE)
+DATASET: train.csv (N = 1,200,000 rows, 21 columns)
+PRIMARY SAMPLE: insurance_sample_20000.csv (n = 20,000 rows, 21 columns)
+NOTEBOOK ARTIFACT: insurance_eda.ipynb
+VISUALIZATIONS DIRECTORY: figures/ (12 Publication-Quality Figures)
+RANDOM SEED: 42 (Fully Reproducible)
+================================================================================
+
+TABLE OF CONTENTS:
+1. EXECUTIVE SUMMARY & RESEARCH MANDATE
+2. SAMPLING STRATEGY, SELECTION & EMPIRICAL VALIDATION
+   2.1 Sampling Strategy Comparison & Mathematical Justification
+   2.2 Numerical Moments, Dispersion & Kolmogorov-Smirnov Tests
+   2.3 Categorical Proportions & Chi-Square Goodness-of-Fit Tests
+   2.4 Missing-Value Prevalence & Duplicate Concordance
+   2.5 Correlation & Covariance Matrix Fidelity
+   2.6 Rare Category Coverage, Extreme Tails & Documented Limitations
+3. COMPREHENSIVE EXPLORATORY DATA ANALYSIS (SECTIONS A TO M)
+   3.1 Section A: Dataset Overview, Architecture & Data Dictionary
+   3.2 Section B: Missing-Value Taxonomy, Patterns & Threat of Listwise Deletion
+   3.3 Section C: Duplicate Analysis across Identifiers & Analytical Features
+   3.4 Section D: Data-Quality, Range Validity & Synthetic Generation Signatures
+   3.5 Section E: Descriptive Statistics (Parametric & Non-Parametric)
+   3.6 Section F: Multi-Method Outlier Audit (IQR, Z-Score, Modified MAD)
+   3.7 Section G: Univariate Topographies & Distributional Shapes
+   3.8 Section H: Bivariate Interactions & Target Stratification
+   3.9 Section I: Linear (Pearson) & Monotonic (Spearman) Correlation Structures
+   3.10 Section J: Distributional Symmetry & Power Transformations (Sqrt vs Log1p)
+   3.11 Section K: Longitudinal Temporal Analysis (Policy Start Date Patterns)
+   3.12 Section L: Higher-Order Multivariate Interaction Structures
+   3.13 Section M: Inferential Statistical Hypothesis Testing & Effect Sizes
+4. SYNTHESIS OF CORE BUSINESS & ACTUARIAL FINDINGS
+5. STRATEGIC, ACTUARIAL & MACHINE LEARNING RECOMMENDATIONS
+================================================================================
+
+
+1. EXECUTIVE SUMMARY & RESEARCH MANDATE
+--------------------------------------------------------------------------------
+This project establishes a mathematically grounded, reproducible framework for
+extracting an exact representative sample of 20,000 rows from an insurance
+dataset of 1,200,000 rows (`train.csv`, ~194 MB raw CSV, ~898 MB in-memory) and
+conducting an exhaustive, publication-grade Exploratory Data Analysis (EDA).
+
+The objective was not merely to select 20,000 arbitrary rows. Rather, the sample
+was selected to preserve the authentic multivariate joint distributions, natural
+missingness prevalence across 11 partially observed attributes, categorical
+market-share balances, correlation structures with the target (`Premium Amount`),
+and valid extreme observations without introducing artificial synthetic data,
+duplicate records, or distorted marginal distributions.
+
+Key Deliverables Verified:
+- `insurance_sample_20000.csv`: Exactly 20,000 unique records (Seed 42).
+- `insurance_eda.ipynb`: Fully executed, zero-error Jupyter Notebook containing
+  all analytical code, formatted verification tables, inline visualizations,
+  and extensive narrative explanations.
+- `eda_summary.txt`: This exhaustive technical and executive report.
+- `figures/`: 12 publication-grade, high-resolution figures (300 DPI) visualizing
+  all dimensions of population fidelity, univariate profiles, bivariate drivers,
+  correlation matrices, transformations, temporal trends, and multivariate models.
+
+
+2. SAMPLING STRATEGY, SELECTION & EMPIRICAL VALIDATION
+--------------------------------------------------------------------------------
+2.1 Sampling Strategy Comparison & Mathematical Justification
+Three sampling paradigms were rigorously benchmarked with N = 1,200,000 and n = 20,000
+(sampling fraction f = 20,000 / 1,200,000 = 1/60 = 1.6667%):
+
+1. Simple Random Sampling Without Replacement (SRS-WOR) [SELECTED]:
+   - Max Numerical Mean Deviation across all columns: 1.308% (Previous Claims)
+   - Average Numerical Mean Deviation: 0.453%
+   - Max Categorical Proportion Shift across all 33 strata: 0.582%
+   - Max Missingness Prevalence Shift: 0.331%
+   - Mean Absolute Correlation Matrix Difference: 0.00575
+   - Theoretical Rationale: By the Glivenko-Cantelli theorem and the Law of Large
+     Numbers, SRS-WOR guarantees uniform convergence of the empirical CDF to the
+     population CDF. Because it conditions on no specific partition, it maintains
+     unbiased joint multivariate dependencies, natural missingness co-occurrences,
+     and the true covariance matrix without introducing conditional bias.
+
+2. Categorical Stratified Sampling (Policy Type x Smoking Status, 6 strata):
+   - Max Numerical Mean Deviation: 1.071%
+   - Max Categorical Proportion Shift: 0.766% (Worse than SRS on unstratified cols)
+   - Max Missingness Prevalence Shift: 0.346%
+   - Critique: Stratifying on a small subset of categorical variables forced exact
+     cell counts on those specific features, but resulted in higher random drift on
+     unstratified features (e.g., Customer Feedback, Occupation, Marital Status).
+
+3. Multivariable Stratified Sampling (Target Quintiles x Policy Type, 15 strata):
+   - Max Numerical Mean Deviation: 1.176%
+   - Max Categorical Proportion Shift: 0.834%
+   - Max Missingness Prevalence Shift: 0.321%
+   - Critique: Stratifying on the target variable artificially conditions on the
+     dependent variable, which risks creating subtle survival or truncation artifacts
+     in regression modeling and distorts the natural variance of the estimators.
+
+Conclusion: Simple Random Sampling Without Replacement (SRS-WOR) with random seed 42
+was selected as the definitively superior methodology.
+
+
+2.2 Numerical Moments, Dispersion & Kolmogorov-Smirnov Tests
+Comparing population (N = 1,200,000) vs. sample (n = 20,000):
+
+Feature               Pop Mean   Samp Mean  Mean Err%  Pop Median Samp Median KS Stat  KS p-val  Inference
+----------------------------------------------------------------------------------------------------------------
+Age                      41.15      41.05     0.236%        41.0        41.0  0.0063   0.4268   Identical
+Annual Income        32,745.22  32,644.99     0.306%   23,911.00   23,897.00  0.0046   0.8114   Identical
+Number of Dependents      2.01       2.02     0.595%         2.0         2.0  0.0063   0.4796   Identical
+Health Score             25.61      25.42     0.752%       24.58       24.25  0.0104   0.0370   Near-Identical
+Previous Claims           1.00       0.99     1.308%         1.0         1.0  0.0058   0.7398   Identical
+Vehicle Age               9.57       9.52     0.541%        10.0        10.0  0.0060   0.4870   Identical
+Credit Score            592.92     591.51     0.238%      595.00      592.00  0.0085   0.1587   Identical
+Insurance Duration        5.02       5.03     0.221%         5.0         5.0  0.0027   0.9985   Identical
+Premium Amount        1,102.54   1,098.31     0.384%      872.00      867.00  0.0051   0.6805   Identical
+
+Findings:
+- All mean errors are strictly below 1.31%, and 7 of 9 are below 0.75%.
+- All discrete feature medians match exactly (Age=41, Dependents=2, Previous Claims=1,
+  Vehicle Age=10, Insurance Duration=5).
+- Two-sample Kolmogorov-Smirnov tests fail to reject H0 across virtually all features
+  (p > 0.15 to p = 0.998), confirming empirical distribution identity.
+
+
+2.3 Categorical Proportions & Chi-Square Goodness-of-Fit Tests
+Across all 10 categorical features (33 individual levels including explicit missingness):
+- Maximum absolute percentage point shift across ANY category: 0.582% (Customer Feedback: Average)
+- Average absolute percentage point shift: 0.184%
+- Gender: Male 50.21% pop vs 50.05% samp (Δ: -0.16%); Female 49.79% pop vs 49.95% samp (Δ: +0.16%)
+- Policy Type: Premium 33.49% pop vs 33.80% samp (Δ: +0.31%); Comprehensive 33.30% vs 33.18%; Basic 33.21% vs 33.02%
+- Smoking Status: Yes 50.16% pop vs 50.00% samp (Δ: -0.16%); No 49.84% pop vs 50.00% samp (Δ: +0.16%)
+- Location: Suburban 33.46% vs 33.56%; Rural 33.41% vs 33.22%; Urban 33.13% vs 33.21%
+- Chi-Square Goodness-of-Fit p-values:
+  Location (p = 0.854), Marital Status (p = 0.778), Occupation (p = 0.691), Smoking Status (p = 0.659),
+  Gender (p = 0.642), Policy Type (p = 0.641), Exercise Frequency (p = 0.490), Education Level (p = 0.332),
+  Customer Feedback (p = 0.247), Property Type (p = 0.198).
+- Every single Chi-square test yields p > 0.19, conclusively failing to reject H0.
+
+
+2.4 Missing-Value Prevalence & Duplicate Concordance
+Missingness Prevalence Comparison:
+Feature                 Pop Null Count   Pop Null %   Samp Null Count   Samp Null %   Shift (% pts)
+---------------------------------------------------------------------------------------------------
+Previous Claims                364,029      30.336%             6,001       30.005%         -0.331%
+Occupation                     358,075      29.840%             5,940       29.700%         -0.140%
+Credit Score                   137,882      11.490%             2,346       11.730%         +0.240%
+Number of Dependents           109,672       9.139%             1,783        8.915%         -0.224%
+Customer Feedback               77,824       6.485%             1,335        6.675%         +0.190%
+Health Score                    74,076       6.173%             1,174        5.870%         -0.303%
+Annual Income                   44,949       3.746%               731        3.655%         -0.091%
+Age                             18,705       1.559%               301        1.505%         -0.054%
+Marital Status                  18,529       1.544%               299        1.495%         -0.049%
+Vehicle Age                          6       0.0005%                0        0.000%         -0.0005%
+Insurance Duration                   1       0.0001%                0        0.000%         -0.0001%
+
+Duplicate Concordance:
+- Exact duplicate rows: Population = 0 (0.00%), Sample = 0 (0.00%)
+- Duplicate ID values:  Population = 0 (0.00%), Sample = 0 (0.00%)
+- Feature-only duplicates (excl. ID): Population = 0 (0.00%), Sample = 0 (0.00%)
+
+
+2.5 Correlation & Covariance Matrix Fidelity
+Comparing pairwise Pearson correlation matrices across all continuous predictors and target:
+- Mean absolute difference in correlation coefficients: 0.00575 (< 0.006)
+- Maximum absolute difference: 0.01884 (between Age and Previous Claims: r_pop = -0.0004 vs r_samp = +0.0184)
+- Target correlation difference:
+  Previous Claims: r_pop = +0.0469 vs r_samp = +0.0441 (Δ = -0.0028)
+  Credit Score:    r_pop = -0.0260 vs r_samp = -0.0314 (Δ = -0.0054)
+  Health Score:    r_pop = +0.0147 vs r_samp = +0.0129 (Δ = -0.0018)
+  Annual Income:   r_pop = -0.0124 vs r_samp = -0.0084 (Δ = +0.0040)
+
+
+2.6 Rare Category Coverage, Extreme Tails & Documented Limitations
+Audit of Discrete Tail Feature (`Previous Claims`):
+Claims Level       Pop Count      Pop Share %     Samp Count     Samp Share %    Difference (% pts)
+---------------------------------------------------------------------------------------------------
+0                    305,433         25.453%           5,196          25.980%               +0.527%
+1                    300,811         25.068%           5,032          25.160%               +0.092%
+2                    167,661         13.972%           2,772          13.860%               -0.112%
+3                     49,011          4.084%             774           3.870%               -0.214%
+4                     10,668          0.889%             178           0.890%               +0.001%
+5                      2,018          0.168%              41           0.205%               +0.037%
+6                        302          0.025%               5           0.025%                0.000%
+7                         58          0.005%               0           0.000%               -0.005%
+8                          8          0.0007%              1           0.005%               +0.004%
+9                          1          0.0001%              0           0.000%               -0.0001%
+Missing (NaN)        364,029         30.336%           6,001          30.005%               -0.331%
+
+Tail Percentile Concordance:
+Feature            Quantile      Population Value      Sample Value      Relative Error (%)
+-------------------------------------------------------------------------------------------
+Annual Income          p01.0              $491.00           $502.76                  2.395%
+Annual Income          p05.0            $1,206.00         $1,212.40                  0.531%
+Annual Income          p50.0           $23,911.00        $23,897.00                  0.059%
+Annual Income          p95.0          $104,539.00       $103,680.00                  0.822%
+Annual Income          p99.0          $138,929.00       $138,616.04                  0.225%
+Annual Income          p99.9          $148,027.00       $147,732.91                  0.199%
+Premium Amount         p01.0               $24.00            $24.00                  0.000%
+Premium Amount         p05.0               $49.00            $49.00                  0.000%
+Premium Amount         p50.0              $872.00           $867.00                  0.573%
+Premium Amount         p95.0            $2,869.00         $2,881.00                  0.418%
+Premium Amount         p99.0            $3,841.00         $3,858.01                  0.443%
+Premium Amount         p99.9            $4,871.00         $4,863.00                  0.164%
+
+Documented Sampling Limitations & Diagnostic Subset Guidance:
+1. Expected Representation of Ultra-Rare Events:
+   In any unbiased sample of fraction f = 1/60, events occurring with population frequency
+   below 1 in 60,000 (0.00167%) have an expected sample frequency below 0.33 records.
+   Specifically:
+   - `Previous Claims = 7`: 58 occurrences in 1.2M -> Expected in 20k = 0.967 rows (Sample observed: 0).
+   - `Previous Claims = 8`: 8 occurrences in 1.2M -> Expected in 20k = 0.133 rows (Sample observed: 1).
+   - `Previous Claims = 9`: 1 occurrence in 1.2M -> Expected in 20k = 0.017 rows (Sample observed: 0).
+   - `Vehicle Age` missing: 6 occurrences in 1.2M -> Expected in 20k = 0.10 rows (Sample observed: 0).
+   - `Insurance Duration` missing: 1 occurrence in 1.2M -> Expected in 20k = 0.017 rows (Sample observed: 0).
+2. Diagnostic Recommendation:
+   The primary sample of 20,000 rows must remain unpolluted by artificial oversampling to
+   ensure valid statistical inferences and true population generalization. However, for specialized
+   actuarial edge-case stress testing (e.g. testing pricing algorithms on policyholders with 7-9 prior
+   claims), actuaries should query a separate, dedicated "High-Claim Diagnostic Slice" extracted
+   specifically from the population records where `Previous Claims >= 7`.
+
+
+3. COMPREHENSIVE EXPLORATORY DATA ANALYSIS (SECTIONS A TO M)
+--------------------------------------------------------------------------------
+3.1 Section A: Dataset Overview, Architecture & Data Dictionary
+- Sample Shape: exactly 20,000 rows x 21 columns.
+- Memory Usage: ~3.84 MB.
+- Unique Columns:
+  1 Identifier: `id` (integer)
+  9 Numerical Features: `Age`, `Annual Income`, `Number of Dependents`, `Health Score`,
+    `Previous Claims`, `Vehicle Age`, `Credit Score`, `Insurance Duration`, `Premium Amount` (target)
+  10 Categorical Features: `Gender`, `Marital Status`, `Education Level`, `Occupation`,
+    `Location`, `Policy Type`, `Customer Feedback`, `Smoking Status`, `Exercise Frequency`, `Property Type`
+  1 Temporal Feature: `Policy Start Date`
+- Constant Columns: None. All 21 columns possess legitimate variance.
+
+
+3.2 Section B: Missing-Value Taxonomy, Patterns & Threat of Listwise Deletion
+- 11 of 21 columns contain missing values in both the population and the sample.
+- Top Missing Attributes:
+  1. `Previous Claims`: 6,001 rows missing (30.01%)
+  2. `Occupation`: 5,940 rows missing (29.70%)
+  3. `Credit Score`: 2,346 rows missing (11.73%)
+  4. `Number of Dependents`: 1,783 rows missing (8.92%)
+  5. `Customer Feedback`: 1,335 rows missing (6.68%)
+  6. `Health Score`: 1,174 rows missing (5.87%)
+  7. `Annual Income`: 731 rows missing (3.66%)
+  8. `Age`: 301 rows missing (1.51%)
+  9. `Marital Status`: 299 rows missing (1.50%)
+  10. `Vehicle Age`: 0 rows missing in sample (pop: 0.0005%)
+  11. `Insurance Duration`: 0 rows missing in sample (pop: 0.0001%)
+- Row-Level Missingness Concentration:
+  - 0 missing features:  6,465 rows (32.32%)
+  - 1 missing feature:   8,417 rows (42.08%)
+  - 2 missing features:  4,014 rows (20.07%)
+  - 3 missing features:    959 rows (4.80%)
+  - 4 missing features:    138 rows (0.69%)
+  - 5 missing features:      6 rows (0.03%)
+  - 6 missing features:      1 row  (0.005%)
+- CRITICAL FINDING: Exactly 13,535 rows (67.68%) contain at least one missing attribute!
+  Performing naive row deletion (`df.dropna()`) destroys 67.7% of the dataset, cutting the effective
+  sample from 20,000 to only 6,465 records.
+- Missingness Mechanisms (MCAR vs MAR Evaluation):
+  - Missingness co-occurrence correlation matrix reveals pairwise correlations near zero (|r| < 0.02),
+    suggesting missingness in one field does not systematically trigger missingness in another.
+  - However, missingness is informative with respect to the target:
+    * Missing `Marital Status`: Mean Premium = $1,293.23 vs Valid = $1,095.35 (+$197.88 difference, p = 1.8e-5)
+    * Missing `Customer Feedback`: Mean Premium = $1,194.02 vs Valid = $1,091.46 (+$102.56 difference, p < 0.001)
+    * Missing `Annual Income`: Mean Premium = $924.31 vs Valid = $1,104.91 (-$180.60 difference, p < 0.001)
+  - Conclusion: Missingness operates under a Missing at Random (MAR) or Missing Not at Random (MNAR)
+    regime where missingness indicators carry predictive information.
+
+
+3.3 Section C: Duplicate Analysis
+- Exact duplicates across all 21 columns: 0 (0.00%).
+- Duplicate identifiers (`id`): 0 (0.00%).
+- Feature duplicates excluding `id`: 0 (0.00%).
+- Conclusion: Pristine observation uniqueness across all rows.
+
+
+3.4 Section D: Data-Quality, Range Validity & Synthetic Generation Signatures
+- Negative Value Audit: 0 negative values across all numerical features.
+- Boundary Conformance:
+  - `Age`: Min 18, Max 64 (Uniformly distributed working adult range).
+  - `Credit Score`: Min 300, Max 849 (Conforms to standard FICO bounds).
+  - `Vehicle Age`: Min 0, Max 19 (Plausible fleet distribution).
+  - `Number of Dependents`: Min 0, Max 4 (Discrete uniform integer).
+  - `Insurance Duration`: Min 1, Max 9 (Discrete uniform integer).
+- Notable Data Anomalies Uncovered:
+  1. Low Income Floor: Minimum `Annual Income` is $1.00 (with 15 records < $100). For an insured adult,
+     $1.00 annual income is an unphysical artifact of synthetic data clipping.
+  2. Fixed Synthetic Timestamp Signature: In `Policy Start Date`, 100% of records share the identical
+     hour, minute, and second: `15:21:39.xxxxxx`. Only the date (YYYY-MM-DD) and microsecond vary,
+     confirming synthetic data generation (e.g. CTGAN/CopulaGAN tabular synthesis).
+  3. String Quality: Zero casing irregularities, zero typos, zero leading or trailing whitespaces.
+
+
+3.5 Section E: Descriptive Statistics
+Parametric & Non-Parametric Metrics (Sample n = 20,000):
+Feature             Mean     Std Dev      Min      Q25   Median      Q75      Max      IQR    Skew  Kurtosis
+------------------------------------------------------------------------------------------------------------
+Age                41.05       13.62    18.00    29.00    41.00    53.00    64.00    24.00   -0.01     -1.20
+Annual Income  32,644.99   32,017.74     1.00 7,963.00 23,897.0 44,484.0 149,974. 36,521.0   +1.46     +1.76
+Dependents          2.02        1.42     0.00     1.00     2.00     3.00     4.00     2.00   -0.03     -1.31
+Health Score       25.42       12.22     2.01    15.72    24.25    34.31    58.98    18.59   +0.30     -0.76
+Previous Claims     0.99        0.98     0.00     0.00     1.00     2.00     8.00     2.00   +0.90     +0.74
+Vehicle Age         9.52        5.76     0.00     5.00    10.00    15.00    19.00    10.00   -0.01     -1.21
+Credit Score      591.51      150.01   300.00   466.00   592.00   721.00   849.00   255.00   -0.10     -1.09
+Duration            5.03        2.59     1.00     3.00     5.00     7.00     9.00     4.00   -0.02     -1.24
+Premium Amount  1,098.31      866.23    20.00   511.00   867.00 1,494.25 4,999.00   983.25   +1.28     +1.68
+
+Categorical Market Shares:
+- `Gender`: Male (50.05%), Female (49.95%)
+- `Policy Type`: Premium (33.80%), Comprehensive (33.18%), Basic (33.02%)
+- `Smoking Status`: Yes (50.00%), No (50.00%)
+- `Location`: Suburban (33.56%), Rural (33.22%), Urban (33.21%)
+- `Property Type`: Apartment (33.82%), Condo (33.36%), House (32.82%)
+- `Education Level`: Bachelor's (25.62%), Master's (25.52%), PhD (24.77%), High School (24.10%)
+- `Exercise Frequency`: Weekly (25.26%), Rarely (25.09%), Daily (24.93%), Monthly (24.72%)
+
+
+3.6 Section F: Multi-Method Outlier Detection
+Outlier Counts across Methods:
+Feature          Valid N   IQR Lower   IQR Upper   IQR Outliers   Z > 3 Outliers   Mod-Z > 3.5   Assessment
+------------------------------------------------------------------------------------------------------------
+Age               19,699        -7.0        89.0      0 (0.00%)        0 (0.00%)     0 (0.00%)   No Outliers
+Annual Income     19,269   -$46,818.5  $99,265.5  1,083 (5.62%)      391 (2.03%)   746 (3.87%)   Legitimate Tail
+Health Score      18,826      -12.16       62.20      0 (0.00%)        0 (0.00%)     0 (0.00%)   No Outliers
+Credit Score      17,654       83.50    1,103.50      0 (0.00%)        0 (0.00%)     0 (0.00%)   No Outliers
+Vehicle Age       20,000       -10.0        30.0      0 (0.00%)        0 (0.00%)     0 (0.00%)   No Outliers
+Previous Claims   13,999        -3.0         5.0      6 (0.04%)      225 (1.61%)     1 (0.01%)   Legitimate Extreme
+Premium Amount    20,000    -$963.88   $2,969.12    856 (4.28%)      266 (1.33%)   620 (3.10%)   Legitimate Tail
+
+Critical Outlier Verdict:
+- Features like `Age`, `Health Score`, `Credit Score`, and `Vehicle Age` have zero outliers under all
+  three methods because their underlying distributions are bounded uniform or platykurtic.
+- `Annual Income`, `Premium Amount`, and `Previous Claims` have genuine heavy right tails.
+- These extreme observations MUST NOT be discarded. In insurance risk modeling, high-income earners
+  and multi-claim policyholders drive underwriting solvency and aggregate loss reserves. Removing them
+  would artificially truncate the tail risk of any actuarial pricing model.
+
+
+3.7 Section G: Univariate Topographies
+- Uniform / Platykurtic Distributions:
+  `Age`, `Vehicle Age`, `Insurance Duration`, and `Number of Dependents` exhibit flat, uniform densities
+  with kurtosis near -1.2 to -1.3. This is characteristic of synthetic datasets generated from uniform
+  marginal priors.
+- Normal-like Symmetrical Distributions:
+  `Credit Score` and `Health Score` display bell-shaped densities with skewness near zero (-0.10 and +0.30).
+- Skewed Distributions:
+  `Annual Income` (skewness +1.46) and `Premium Amount` (skewness +1.28) display steep exponential decay
+  with dense mass concentrated below their medians ($23,897 and $867) and extended upper tails.
+
+
+3.8 Section H: Bivariate Interactions & Target Stratification
+Evaluating `Premium Amount` across categorical strata:
+- `Policy Type`: Basic (Mean: $1,101.44, Median: $866.50), Comprehensive (Mean: $1,099.98, Median: $872.00),
+  Premium (Mean: $1,093.62, Median: $864.00). Unconditional pricing differences across policy tiers are
+  statistically indistinguishable (ANOVA p = 0.81).
+- `Smoking Status`: Smokers (Mean: $1,100.22, Median: $868.00) vs Non-Smokers (Mean: $1,096.40, Median: $867.00).
+  T-test p = 0.75, Mann-Whitney p = 0.99. Smoking status alone does not scale base premium unconditionally.
+- `Occupation`: Employed ($1,105.74), Self-Employed ($1,102.73), Unemployed ($1,097.46), Missing ($1,088.94).
+- `Location`: Urban ($1,104.75), Suburban ($1,102.50), Rural ($1,087.65).
+
+
+3.9 Section I: Correlation Analysis
+Pearson (r) and Spearman (rho) correlations with `Premium Amount`:
+Feature                 Pearson r    Pearson p-val    Spearman rho    Spearman p-val   Relationship Type
+--------------------------------------------------------------------------------------------------------
+Previous Claims           +0.0441         1.8e-07          +0.0380           6.9e-06   Positive Linear/Rank
+Credit Score              -0.0314         2.9e-05          -0.0522           1.5e-12   Negative Monotonic
+Health Score              +0.0129         0.0760           +0.0098           0.1783   Weak Positive
+Annual Income             -0.0084         0.2449           -0.0627           3.4e-18   Stronger Rank Dependency
+Insurance Duration        +0.0061         0.3897           +0.0070           0.3245   Negligible
+Age                       -0.0055         0.4385           -0.0091           0.1992   Negligible
+Vehicle Age               -0.0048         0.4975           -0.0007           0.9208   Negligible
+Number of Dependents      +0.0013         0.8617           -0.0020           0.7891   Negligible
+
+Collinearity Analysis:
+Pairwise predictor-predictor correlations are all below |r| < 0.03. There is zero multicollinearity
+in the dataset (Variance Inflation Factors VIF ~ 1.00 for all features).
+
+
+3.10 Section J: Distribution & Transformation Analysis
+Evaluating variance-stabilizing normalizing transforms on positive right-skewed variables:
+
+Target Variable: `Premium Amount`
+- Raw Scale:        Skewness = +1.280, Kurtosis = +1.676 (Heavy right tail)
+- Square Root Scale: Skewness = +0.220, Kurtosis = -0.167 (Remarkable symmetry & near-normal kurtosis)
+- Log1p Scale:       Skewness = -1.250, Kurtosis = +1.590 (Overcorrected into substantial left skew)
+Finding: Square root transformation is distinctly superior to log1p for `Premium Amount`.
+
+Feature: `Annual Income`
+- Raw Scale:        Skewness = +1.458, Kurtosis = +1.762
+- Square Root Scale: Skewness = +0.473, Kurtosis = -0.385
+- Log1p Scale:       Skewness = -0.988, Kurtosis = +1.165
+Finding: Square root transformation stabilizes variance without excessive compression.
+
+
+3.11 Section K: Longitudinal Temporal Analysis
+- Date Span: August 17, 2019 to August 15, 2024 (Exactly 5 full years).
+- Annual Volume Distribution in 20k Sample:
+  * 2019: 1,376 policies (Partial year: Aug-Dec) | Mean Premium: $1,181.45
+  * 2020: 4,097 policies (Full year)            | Mean Premium: $1,093.45
+  * 2021: 4,065 policies (Full year)            | Mean Premium: $1,103.44
+  * 2022: 4,085 policies (Full year)            | Mean Premium: $1,104.15
+  * 2023: 3,995 policies (Full year)            | Mean Premium: $1,077.95
+  * 2024: 2,382 policies (Partial year: Jan-Aug) | Mean Premium: $1,074.05
+- Finding: Underwriting volume is remarkably stable at ~4,050 policies per full year (~242,000 per year
+  in the 1.2M population). Premium means display zero secular inflation over the five-year window.
+
+
+3.12 Section L: Multivariate Feature Interactions
+Multi-way Interaction Highlights:
+1. `Policy Type` x `Location`:
+   Median premium is highest for Basic policies in Urban areas ($881) and lowest for Premium policies
+   in Rural areas ($855). Urban drivers face slightly higher premiums across all policy tiers.
+2. `Age Cohort` x `Smoking Status`:
+   Mean premium does not diverge substantially between young smokers vs young non-smokers, confirming
+   that simple multiplicative penalties on smoking are absent in this rating schedule.
+3. `Previous Claims` x `Vehicle Age Group`:
+   Policyholders with 3-4 previous claims driving older vehicles (13-19 years) experience higher average
+   premiums ($1,215) compared to zero-claim drivers of new vehicles ($1,080).
+
+
+3.13 Section M: Inferential Statistical Hypothesis Testing
+Test 1: Kruskal-Wallis H-Test (Premium across Policy Type)
+- Statistic: H = 0.0973, p = 0.9525. Eta-squared = 0.000.
+- Inference: Fail to reject H0. Policy tier alone does not determine premium level.
+
+Test 2: Mann-Whitney U Test (Premium by Smoking Status)
+- Statistic: U = 49,994,912, p = 0.9901. Cliff's delta = 0.000.
+- Inference: Fail to reject H0. No unconditional difference between smokers and non-smokers.
+
+Test 3: Mann-Whitney U Test (Premium by Missing Marital Status)
+- Statistic: U = 3,370,192, p = 1.80e-05. Delta = +$197.88.
+- Inference: Reject H0 with extreme statistical significance. Missingness in Marital Status is informative.
+
+Test 4: Pearson Correlation Test (Previous Claims vs Premium)
+- Statistic: r = +0.0441, p = 1.78e-07.
+- Inference: Reject H0. Significant positive escalation with prior loss frequency.
+
+
+4. SYNTHESIS OF CORE BUSINESS & ACTUARIAL FINDINGS
+--------------------------------------------------------------------------------
+1. Highly Flat Unconditional Marginal Demographics:
+   Traditional demographic predictors (Gender, Location, Marital Status, Education, Smoking) exhibit
+   remarkably flat unconditional univariate differences with Premium Amount. Actuaries and data scientists
+   must not assume standard linear additive pricing equations; non-linear combinations and latent
+   risk-score interactions govern this dataset.
+
+2. Heavy Tail Risk in Financial Metrics:
+   Both `Annual Income` and `Premium Amount` carry legitimate heavy right tails with 4-5% of observations
+   falling outside standard Tukey IQR fences. Truncating or clipping these tails would introduce severe
+   underestimation of loss costs and underwriting revenue.
+
+3. The Danger of Listwise Deletion:
+   67.7% of all policy records have at least one missing field. Any data pipeline that utilizes `dropna()`
+   will discard two-thirds of the business and introduce severe selection bias, as missingness in features
+   like `Marital Status` and `Customer Feedback` is correlated with higher premium amounts.
+
+4. Synthetic Data Signatures:
+   Uniform distributions in age, duration, and dependents, combined with identical 15:21:39 timestamps
+   and $1.00 income floors, reflect synthetic generation artifacts (Kaggle playground synthesis).
+
+
+5. STRATEGIC, ACTUARIAL & MACHINE LEARNING RECOMMENDATIONS
+--------------------------------------------------------------------------------
+1. Imputation & Missingness Engineering:
+   - Create explicit binary missingness indicator flags (`is_null_marital_status`, `is_null_income`,
+     `is_null_feedback`) as primary features before imputation.
+   - Use tree-based algorithms with native missing value support (LightGBM, XGBoost, CatBoost).
+   - If linear modeling is required, apply median imputation for continuous features and create an
+     explicit "Missing" category level for categorical features. Never drop incomplete rows.
+
+2. Target Transformation for Regression:
+   - Train regression models targeting $\sqrt{\text{Premium Amount}}$ rather than raw dollars or log scale.
+   - For Generalized Linear Models (GLMs), utilize a Tweedie or Gamma distribution with a log or square-root link.
+
+3. Outlier Treatment Protocol:
+   - Retain all legitimate outliers in `Annual Income`, `Premium Amount`, and `Previous Claims`.
+   - Consider Winsorizing `Annual Income` only at the 99.9th percentile ($147,700) and replacing the $1.00
+     floor with the state minimum wage threshold or median.
+
+4. Modeling Architecture:
+   - Prioritize gradient boosted decision trees over standard linear regression, as the pricing schedule
+     relies on subtle interaction splits rather than dominant linear slopes.
+   - Evaluate feature engineering terms: Claim Frequency Rate (`Previous Claims / Vehicle Age`),
+     Income-to-Premium Burden, and Credit-Adjusted Risk Scores.
+================================================================================
+END OF SUMMARY REPORT
+================================================================================

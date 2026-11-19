@@ -1,0 +1,5 @@
+treatment_strategy,mean_mae,std_mae,mean_rmse,std_rmse,mean_r2,std_r2,advantages,limitations,recommended
+Retain Original (No Trimming/Capping),655.46,4.64,858.24,10.54,0.018,0.0018,Preserves genuine high-risk actuarial claims,Higher variance on tail loss,Yes (Actuarial Standard)
+Winsorization (Capped at 1st & 99th Percentiles),654.41,5.21,857.3,11.27,0.0201,0.0039,Protects against point-mass skewness,Artificially underestimates extreme policy liability,Alternative for Linear Models
+Outlier Trimming (|Z| > 3.0 Removed),644.12,4.88,858.03,11.68,0.0185,0.0037,Reduces training variance,"Discards valid policies, sample bias",No (Produces Underwriting Bias)
+Target Log-Transformation (log1p Target Model),629.15,8.32,933.58,15.51,-0.1619,0.0118,Stabilizes heavy-tail residual variance,Biased back-transformation under expm1,No (Produces Underwriting Bias)

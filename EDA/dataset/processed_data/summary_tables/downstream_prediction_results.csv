@@ -1,0 +1,7 @@
+pipeline,mean_mae,std_mae,mean_rmse,std_rmse,mean_r2,std_r2
+Dummy Median Baseline,638.87,6.62,896.68,13.71,-0.0719,0.0095
+Listwise Deletion (Drop Rows),657.96,6.31,864.27,18.93,-0.0076,0.0099
+Simple Median/Mode Imputation,655.44,4.79,857.66,11.08,0.0193,0.0037
+Median/Mode + Missing Indicators,647.45,4.15,851.28,10.24,0.0338,0.0045
+Iterative Imputer (Bayesian Ridge),657.48,4.58,859.77,10.13,0.0144,0.0019
+Native NaN (HistGradientBoosting),645.98,5.1,849.9,10.44,0.0369,0.0063

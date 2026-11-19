@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-blue-600; }
+}
+
+@layer components {
+  .card { @apply bg-white rounded-xl border border-slate-200 shadow-sm; }
+  .card-elevated { @apply bg-white rounded-xl border border-slate-200 shadow-md; }
+  .demo-badge { @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200; }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+}

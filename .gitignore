@@ -1,0 +1,57 @@
+# ==============================================================================
+# Insurance Intelligence Enterprise Project - Git Ignore
+# ==============================================================================
+
+# Node / Frontend Dependencies & Builds
+frontend/node_modules/
+node_modules/
+frontend/dist/
+dist/
+frontend/.vite/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python / Backend Virtual Environments & Bytecode
+backend/.venv/
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Environment Variables & Secrets (Keep .env.example only!)
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.cert
+*.id_rsa
+
+# Large Population Datasets (Explicitly Excluded from Repository)
+train.csv
+**/train.csv
+*.zip
+
+# Operating System & IDE Cache Files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temporary & Log Files
+*.log
+tmp/
+temp/

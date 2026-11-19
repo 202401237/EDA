@@ -1,0 +1,22 @@
+Column,Total Rows,Missing Count,Missing %,Non-Missing Count,Non-Missing %,Dtype,Unique Count,Column Type,Recommended Treatment
+Previous Claims,20000,6001,30.0,13999,69.99,float64,8,Numerical,Consider advanced imputation (KNN/MICE) or drop column
+Occupation,20000,5940,29.7,14060,70.3,object,3,Categorical,Consider advanced imputation or drop column
+Credit Score,20000,2346,11.73,17654,88.27,float64,550,Numerical,Impute with median or KNN
+Number of Dependents,20000,1783,8.91,18217,91.09,float64,5,Numerical,Impute with median or KNN
+Customer Feedback,20000,1335,6.68,18665,93.33,object,3,Categorical,Impute with mode or predictive model
+Health Score,20000,1174,5.87,18826,94.13,float64,17892,Numerical,Impute with median or KNN
+Annual Income,20000,731,3.65,19269,96.34,float64,11552,Numerical,Impute with median
+Age,20000,301,1.5,19699,98.5,float64,47,Numerical,Impute with median
+Marital Status,20000,299,1.49,19701,98.5,object,3,Categorical,Impute with mode
+Gender,20000,0,0.0,20000,100.0,object,2,Categorical,No action needed
+id,20000,0,0.0,20000,100.0,int64,20000,Identifier,No action needed
+Education Level,20000,0,0.0,20000,100.0,object,4,Categorical,No action needed
+Location,20000,0,0.0,20000,100.0,object,3,Categorical,No action needed
+Vehicle Age,20000,0,0.0,20000,100.0,float64,20,Numerical,No action needed
+Policy Type,20000,0,0.0,20000,100.0,object,3,Categorical,No action needed
+Insurance Duration,20000,0,0.0,20000,100.0,float64,9,Numerical,No action needed
+Policy Start Date,20000,0,0.0,20000,100.0,object,17489,Date,No action needed
+Smoking Status,20000,0,0.0,20000,100.0,object,2,Categorical,No action needed
+Exercise Frequency,20000,0,0.0,20000,100.0,object,4,Categorical,No action needed
+Property Type,20000,0,0.0,20000,100.0,object,3,Categorical,No action needed
+Premium Amount,20000,0,0.0,20000,100.0,float64,3113,Target,No action needed

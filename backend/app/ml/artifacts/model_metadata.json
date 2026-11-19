@@ -1,0 +1,103 @@
+{
+  "target_column": "Premium Amount",
+  "features": [
+    "Age",
+    "Annual Income",
+    "Number of Dependents",
+    "Health Score",
+    "Previous Claims",
+    "Vehicle Age",
+    "Credit Score",
+    "Insurance Duration",
+    "Gender",
+    "Marital Status",
+    "Education Level",
+    "Occupation",
+    "Location",
+    "Policy Type",
+    "Smoking Status",
+    "Exercise Frequency",
+    "Property Type"
+  ],
+  "numerical_features": [
+    "Age",
+    "Annual Income",
+    "Number of Dependents",
+    "Health Score",
+    "Previous Claims",
+    "Vehicle Age",
+    "Credit Score",
+    "Insurance Duration"
+  ],
+  "categorical_features": [
+    "Gender",
+    "Marital Status",
+    "Education Level",
+    "Occupation",
+    "Location",
+    "Policy Type",
+    "Smoking Status",
+    "Exercise Frequency",
+    "Property Type"
+  ],
+  "feature_mapping": {
+    "age": "Age",
+    "gender": "Gender",
+    "annualIncome": "Annual Income",
+    "maritalStatus": "Marital Status",
+    "numberOfDependents": "Number of Dependents",
+    "educationLevel": "Education Level",
+    "occupation": "Occupation",
+    "healthScore": "Health Score",
+    "location": "Location",
+    "policyType": "Policy Type",
+    "previousClaims": "Previous Claims",
+    "vehicleAge": "Vehicle Age",
+    "creditScore": "Credit Score",
+    "insuranceDuration": "Insurance Duration",
+    "smokingStatus": "Smoking Status",
+    "exerciseFrequency": "Exercise Frequency",
+    "propertyType": "Property Type"
+  },
+  "dataset_source": "insurance_sample_20000.csv",
+  "dataset_records_total": 20000,
+  "train_samples_count": 16000,
+  "test_samples_count": 4000,
+  "random_seed": 42,
+  "selected_model": "Random Forest",
+  "baseline_metrics": {
+    "mae": 638.93,
+    "rmse": 891.47,
+    "r2": -0.0611
+  },
+  "selected_model_metrics": {
+    "mae": 656.49,
+    "rmse": 855.66,
+    "r2": 0.0224
+  },
+  "all_candidate_metrics": {
+    "Ridge Regression": {
+      "mae": 669.55,
+      "rmse": 864.6,
+      "r2": 0.0019
+    },
+    "HistGradientBoosting": {
+      "mae": 658.55,
+      "rmse": 855.21,
+      "r2": 0.0234
+    },
+    "Random Forest": {
+      "mae": 656.49,
+      "rmse": 855.66,
+      "r2": 0.0224
+    }
+  },
+  "trained_at_utc": "2026-10-23T13:45:16.598847+00:00",
+  "premium_category_thresholds": {
+    "low_max": 700.0,
+    "medium_max": 1500.0
+  },
+  "limitations": "The underlying synthetic Kaggle insurance dataset exhibits inherently low linear and non-linear correlation between demographic predictor features and Premium Amount (highest Pearson r ~ 0.044). Consequently, R\u00b2 values typically remain modest (0.02 - 0.05), which is reported transparently without synthetic metric inflation.",
+  "sklearn_version": "1.9.1",
+  "model_evaluation_role": "Experimental Demonstration / Educational Prototype (R2=0.0224; not production pricing system)"
+}

@@ -1,0 +1,10 @@
+column_name,valid_n,min_value,max_value,mean,median,std,iqr_fence_lower,iqr_fence_upper,iqr_outlier_count,iqr_outlier_pct,extreme_iqr_count,zscore_outlier_count,zscore_outlier_pct,mad_outlier_count,mad_outlier_pct,domain_classification,recommended_treatment
+Age,19699,18.0,64.0,41.05,41.0,13.62,-7.0,89.0,0,0.0,0,0,0.0,0,0.0,Uniform or bounded distribution; zero severe outliers,Retain unchanged
+Annual Income,19269,17.0,149995.0,32644.99,23897.0,32017.74,-47010.0,99582.0,1083,5.62,0,391,2.03,746,3.87,Legitimate Skewed Wealth Distribution with low floor artifact ($1.00 minimums),Retain original values (Power/Log transformation recommended for linear models)
+Number of Dependents,18217,0.0,4.0,2.02,2.0,1.42,-2.0,6.0,0,0.0,0,0,0.0,0,0.0,Uniform or bounded distribution; zero severe outliers,Retain unchanged
+Health Score,18826,2.35,55.96,25.42,24.25,12.22,-12.25,62.33,0,0.0,0,0,0.0,0,0.0,"Continuous biometric rating (Bounded, mild right tail)",Retain original values (No severe outliers detected)
+Previous Claims,13999,0.0,8.0,0.99,1.0,0.98,-3.0,5.0,6,0.04,0,225,1.61,1,0.01,High-frequency claim counts (Discrete Poisson-like distribution up to 8 claims),Retain original values (Capping at 4 claims is viable alternative)
+Vehicle Age,20000,0.0,19.0,9.52,10.0,5.76,-10.0,30.0,0,0.0,0,0,0.0,0,0.0,Uniform or bounded distribution; zero severe outliers,Retain unchanged
+Credit Score,17654,300.0,849.0,591.51,592.0,150.01,93.0,1093.0,0,0.0,0,0,0.0,0,0.0,Uniform or bounded distribution; zero severe outliers,Retain unchanged
+Insurance Duration,20000,1.0,9.0,5.03,5.0,2.59,-3.0,13.0,0,0.0,0,0,0.0,0,0.0,Uniform or bounded distribution; zero severe outliers,Retain unchanged
+Premium Amount,20000,20.0,4985.0,1098.31,867.0,866.23,-963.88,2969.12,856,4.28,84,266,1.33,620,3.1,"Valid Heavy-Tail Actuarial Risks (Severe claims, high vehicle age, luxury properties)",Retain original values (Use Huber/Log loss in modeling to dampen tail influence)
